@@ -3,9 +3,11 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.routers import invoices
+from app.routers import auth, invoices, users
 
 app = FastAPI(title="InvoiceFlow API", version="0.1.0")
+app.include_router(auth.router)
+app.include_router(users.router)
 app.include_router(invoices.router)
 
 

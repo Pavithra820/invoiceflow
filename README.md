@@ -2,7 +2,7 @@
 
 Invoice and document processing platform: upload invoices, extract the data with an LLM in background workers, review and correct it, and report on spend by supplier and month.
 
-**Status:** step 1 of 8 (foundation). Backend schema, migrations, first API endpoints and tests.
+**Status:** step 2 of 8 (authentication and roles).
 
 ## Stack
 Python, FastAPI, PostgreSQL, SQLAlchemy 2.0, Alembic, Docker Compose, pytest. (Planned: React + TypeScript, GitHub Actions, AWS + Terraform, monitoring, LLM extraction.)
@@ -29,6 +29,16 @@ pytest
 - **Indexes** on `status` and `(supplier_id, issue_date)` for the list and reporting queries.
 - **Migrations with Alembic**, applied automatically when the container starts.
 - **Liveness and readiness endpoints** (`/health`, `/health/ready`) for orchestration and monitoring.
+
+## Authentication and roles (step 2)
+- Passwords are hashed with bcrypt and never stored or returned in plain text.
+- Login returns a short-lived JWT (30 minutes). The token holds only the user id; the role is read from the database on each request, so role changes apply immediately.
+- Roles: **viewer** (read), **reviewer** (read and create invoices), **admin** (everything, plus user and role management).
+- The first account registered becomes the admin. Later accounts start as viewers. An admin cannot change their own role, so the last admin cannot lock everyone out.
+- Wrong password and unknown email return the same error, and take similar time.
+- Set `SECRET_KEY` in `.env` to a long random value before any real deployment.
+
+Try it in Swagger (`/docs`): register, click **Authorize**, enter your email as the username and your password, then call the invoice endpoints.
 
 ## Roadmap
 1. Foundation (this step) 2. Auth and roles 3. React + TypeScript frontend 4. CI/CD with GitHub Actions 5. AWS with Terraform 6. Logging, metrics, alerts, load test 7. Upload + LLM extraction with background jobs 8. Polish and write-up

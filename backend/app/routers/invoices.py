@@ -6,7 +6,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, selectinload
 
 from app.database import get_db
-from app.models import Invoice, InvoiceLineItem, InvoiceStatus, Supplier
+from app.deps import get_current_user, require_roles
+from app.models import Invoice, InvoiceLineItem, InvoiceStatus, Supplier, UserRole
 from app.schemas import InvoiceCreate, InvoiceList, InvoiceOut, LineItemOut
 
 router = APIRouter(prefix="/invoices", tags=["invoices"])
@@ -29,7 +30,12 @@ def to_out(invoice: Invoice) -> InvoiceOut:
     )
 
 
-@router.post("", response_model=InvoiceOut, status_code=201)
+@router.post(
+    "",
+    response_model=InvoiceOut,
+    status_code=201,
+    dependencies=[Depends(require_roles(UserRole.ADMIN, UserRole.REVIEWER))],
+)
 def create_invoice(payload: InvoiceCreate, db: Session = Depends(get_db)) -> InvoiceOut:
     line_items = [
         InvoiceLineItem(
@@ -68,7 +74,7 @@ def create_invoice(payload: InvoiceCreate, db: Session = Depends(get_db)) -> Inv
     return to_out(invoice)
 
 
-@router.get("", response_model=InvoiceList)
+@router.get("", response_model=InvoiceList, dependencies=[Depends(get_current_user)])
 def list_invoices(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
@@ -95,7 +101,7 @@ def list_invoices(
     )
 
 
-@router.get("/{invoice_id}", response_model=InvoiceOut)
+@router.get("/{invoice_id}", response_model=InvoiceOut, dependencies=[Depends(get_current_user)])
 def get_invoice(invoice_id: int, db: Session = Depends(get_db)) -> InvoiceOut:
     invoice = db.scalar(
         select(Invoice)

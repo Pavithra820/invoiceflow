@@ -56,3 +56,42 @@ class InvoiceList(BaseModel):
     total: int
     page: int
     page_size: int
+
+
+# ---- users and auth ----
+import re  # noqa: E402
+
+from app.models import UserRole  # noqa: E402
+
+EMAIL_PATTERN = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+
+
+class UserCreate(BaseModel):
+    email: str = Field(max_length=254)
+    password: str = Field(min_length=8, max_length=72)
+
+    @model_validator(mode="after")
+    def validate_fields(self) -> "UserCreate":
+        self.email = self.email.strip().lower()
+        if not EMAIL_PATTERN.match(self.email):
+            raise ValueError("invalid email address")
+        if len(self.password.encode("utf-8")) > 72:
+            raise ValueError("password is too long")
+        return self
+
+
+class UserOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    email: str
+    role: UserRole
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
+class RoleUpdate(BaseModel):
+    role: UserRole
