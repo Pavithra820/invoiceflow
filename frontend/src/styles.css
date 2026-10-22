@@ -1,0 +1,77 @@
+:root {
+  --bg: #f5f6f8;
+  --card: #ffffff;
+  --text: #1f2933;
+  --muted: #667085;
+  --primary: #2457c5;
+  --border: #d8dce3;
+  --danger: #b42318;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+a { color: var(--primary); }
+h1 { font-size: 1.6rem; margin: 0 0 1rem; }
+h2 { font-size: 1.15rem; margin: 1.5rem 0 0.75rem; }
+
+.topbar { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.5rem; background: var(--card); border-bottom: 1px solid var(--border); }
+.brand { font-weight: 700; font-size: 1.15rem; text-decoration: none; }
+.topbar-right { display: flex; align-items: center; gap: 0.75rem; }
+.container { max-width: 960px; margin: 1.5rem auto; padding: 0 1rem; }
+.center-note { text-align: center; margin-top: 3rem; color: var(--muted); }
+
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; }
+.table-card { padding: 0; overflow-x: auto; }
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.page-header h1 { margin: 0; }
+
+label { display: block; font-weight: 600; margin: 0.75rem 0 0.25rem; font-size: 0.9rem; }
+input, select { width: 100%; padding: 0.55rem 0.65rem; border: 1px solid var(--border); border-radius: 6px; font: inherit; background: #fff; }
+input:focus, select:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+
+.button { display: inline-block; padding: 0.55rem 1rem; border: 0; border-radius: 6px; background: var(--primary); color: #fff; font: inherit; font-weight: 600; cursor: pointer; text-decoration: none; }
+.button:disabled { opacity: 0.55; cursor: not-allowed; }
+.button-secondary { background: #fff; color: var(--text); border: 1px solid var(--border); }
+.link-button { background: none; border: 0; color: var(--primary); cursor: pointer; font: inherit; margin-top: 0.75rem; padding: 0; }
+
+.error { color: var(--danger); margin: 0.5rem 0; }
+.error.small { font-size: 0.85rem; margin: 0.25rem 0 0; }
+.hint { color: var(--muted); font-size: 0.9rem; }
+
+.auth-wrapper { display: flex; justify-content: center; margin-top: 4rem; padding: 0 1rem; }
+.auth-card { width: 100%; max-width: 380px; display: flex; flex-direction: column; }
+.auth-card .button { margin-top: 1rem; }
+
+.filters { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+.filters input { max-width: 280px; }
+.filters select { max-width: 200px; }
+
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 0.7rem 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+.right { text-align: right; }
+
+.pagination { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; }
+
+.badge { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600; background: #eef0f4; }
+.badge-role { background: #e3ecff; color: var(--primary); }
+.badge-approved { background: #d9f2e3; color: #0b6b34; }
+.badge-needs_review { background: #fff1d6; color: #8a5a00; }
+.badge-failed { background: #fde2e0; color: var(--danger); }
+.badge-processing { background: #e3ecff; color: var(--primary); }
+
+.details dl { display: grid; grid-template-columns: 140px 1fr; gap: 0.5rem 1rem; margin: 0; }
+.details dt { color: var(--muted); }
+.details dd { margin: 0; }
+
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 1rem; }
+.line-row { display: grid; grid-template-columns: 3fr 1fr 1.2fr 0.8fr auto; gap: 0.5rem; align-items: start; margin-bottom: 0.5rem; }
+.line-amount { padding: 0.55rem 0; text-align: right; color: var(--muted); }
+form.card > .button[type="submit"] { margin-top: 1rem; }
+
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr; }
+  .line-row { grid-template-columns: 1fr 1fr; }
+  .filters { flex-direction: column; }
+  .filters input, .filters select { max-width: none; }
+}
